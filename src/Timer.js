@@ -23,14 +23,6 @@ function setTotalTime(props) {
     return totalTime.getTime();
 }
 
-// function getCurrentTime(_totalTime) {
-//     const time = Date.parse(_totalTime) - Date.now();
-
-
-
-//     return time;
-// }
-
 export function Timer (props) { /* props will be the time the timer is set to (ex: 5 minutes, ten minutes, etc) */
 /*
 * this timer needs hours, minutes, and seconds
@@ -59,10 +51,13 @@ export function Timer (props) { /* props will be the time the timer is set to (e
 
 
 
-      console.log("hours: " + timeHours, "minutes: " + timeMinutes, "seconds: " + timeSeconds)
+    //   console.log("hours: " + timeHours, "minutes: " + timeMinutes, "seconds: " + timeSeconds)
 
     return (
         <div className="timer">
+            <p>Hours: {timeHours}</p>
+            <p>Minutes: {timeMinutes}</p>
+            <p>Seconds: {timeSeconds}</p>
         </div>
     )
 }
