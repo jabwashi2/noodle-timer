@@ -49,13 +49,11 @@ export function Timer (props) { /* props will be the time the timer is set to (e
         return () => clearInterval(interval);
       }, []);
 
-
-
     //   console.log("hours: " + timeHours, "minutes: " + timeMinutes, "seconds: " + timeSeconds)
 
     return (
         <div className="timer">
-            <p>{timeHours > 0 ? timeHours : 0} : {timeMinutes > 0 ? timeMinutes : 0} : {timeSeconds > -1 ? timeSeconds : 0}</p>
+            <p>{timeHours > 0 ? timeHours : 0} : {timeMinutes > 0 ? timeMinutes : 0} : {timeSeconds > -1 ? timeSeconds : 0}</p> {/*time stops at 0*/}
         </div>
     )
 }
