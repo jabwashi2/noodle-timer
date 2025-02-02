@@ -4,7 +4,7 @@ import {Timer} from './Timer.js'
 function App() {
   return (
     <div className="App">
-      <Timer hours={0} minutes={5} seconds={0}/>
+      <Timer hours={0} minutes={2} seconds={0}/>
     </div>
   );
 }

@@ -43,7 +43,7 @@ export function Timer (props) { /* props will be the time the timer is set to (e
         setTimeSeconds(Math.floor((currentTime / SECOND) % 60));
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         const interval = setInterval(() => getTime(totalTime), 1000);
     
         return () => clearInterval(interval);
@@ -55,9 +55,7 @@ export function Timer (props) { /* props will be the time the timer is set to (e
 
     return (
         <div className="timer">
-            <p>Hours: {timeHours}</p>
-            <p>Minutes: {timeMinutes}</p>
-            <p>Seconds: {timeSeconds}</p>
+            <p>{timeHours > 0 ? timeHours : 0} : {timeMinutes > 0 ? timeMinutes : 0} : {timeSeconds > -1 ? timeSeconds : 0}</p>
         </div>
     )
 }
