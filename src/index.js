@@ -2,11 +2,33 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
+import {Timer} from './Timer.js';
+
+const router = createBrowserRouter([
+  {
+    path: "",
+    element: <App />,
+  },
+  {
+    path: "/Timer",
+    element: <Timer />
+  },
+  {
+    path: "/Timer/:id",
+    element: <Timer />
+  }
+]
+)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 

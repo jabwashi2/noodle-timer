@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
 
 /*
 * there will be preset values based on a couple different noodles, then there will be a custom option where the user can set any time they want
@@ -10,15 +11,35 @@ const SECOND = 1000;
 const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 
+// times for each timer
+let pasta = [0, 10, 0];
+let udon = [0, 5, 0];
+let ramen = [0, 3, 0];
 
-function setTotalTime(props) {
+
+function setTotalTime(id) {
 
     // let's try adding the time we want to get to + the current time to = totalTime
     const totalTime = new Date();
 
-    totalTime.setHours(totalTime.getHours() + props.hours);
-    totalTime.setMinutes(totalTime.getMinutes() + props.minutes);
-    totalTime.setSeconds(totalTime.getSeconds() + props.seconds);
+    let hours = 0;
+    let minutes = 0;
+    let seconds = 0;
+
+    if (id === 'pasta'){
+        hours = pasta[0];
+        minutes = pasta[1];
+        seconds = pasta[2];
+    }
+    else if (id === 'udon'){
+        hours = udon[0];
+        minutes = udon[1];
+        seconds = udon[2];
+    }
+
+    totalTime.setHours(totalTime.getHours() + hours);
+    totalTime.setMinutes(totalTime.getMinutes() + minutes);
+    totalTime.setSeconds(totalTime.getSeconds() + seconds);
 
     return totalTime.getTime();
 }
@@ -28,12 +49,16 @@ export function Timer (props) { /* props will be the time the timer is set to (e
 * this timer needs hours, minutes, and seconds
 */
 
+    // the amount of time will be based on the id in the url
+    const {id} = useParams();
+    console.log(id)
+
     const [timeHours, setTimeHours] = useState(0);
     const [timeMinutes, setTimeMinutes] = useState(0);
     const [timeSeconds, setTimeSeconds] = useState(0);
 
     // calling our helper function!
-    const totalTime = setTotalTime(props);
+    const totalTime = setTotalTime(id);
 
     const getTime = () => {
         const currentTime = totalTime - Date.now();
@@ -49,7 +74,6 @@ export function Timer (props) { /* props will be the time the timer is set to (e
         return () => clearInterval(interval);
       }, []);
 
-    //   console.log("hours: " + timeHours, "minutes: " + timeMinutes, "seconds: " + timeSeconds)
 
     return (
         <div className="timer">
