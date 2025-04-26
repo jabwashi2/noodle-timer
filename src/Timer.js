@@ -26,16 +26,35 @@ function setTotalTime(id) {
     let minutes = 0;
     let seconds = 0;
 
-    if (id === 'pasta'){
-        hours = pasta[0];
-        minutes = pasta[1];
-        seconds = pasta[2];
+    switch(id) {
+        default:
+            hours = 0;
+            minutes = 0;
+            seconds = 0;
+            break;
+        case 'pasta':
+            hours = pasta[0];
+            minutes = pasta[1];
+            seconds = pasta[2];
+            break;
+        case 'udon':
+            hours = udon[0];
+            minutes = udon[1];
+            seconds = udon[2];
+            break;
     }
-    else if (id === 'udon'){
-        hours = udon[0];
-        minutes = udon[1];
-        seconds = udon[2];
-    }
+
+
+    // if (id === 'pasta'){
+    //     hours = pasta[0];
+    //     minutes = pasta[1];
+    //     seconds = pasta[2];
+    // }
+    // else if (id === 'udon'){
+    //     hours = udon[0];
+    //     minutes = udon[1];
+    //     seconds = udon[2];
+    // }
 
     totalTime.setHours(totalTime.getHours() + hours);
     totalTime.setMinutes(totalTime.getMinutes() + minutes);
