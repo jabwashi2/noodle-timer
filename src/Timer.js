@@ -42,8 +42,8 @@ function setTotalTime(id) {
             break;
         case 'udon':
             hours = udon[0];
-            minutes = udon[1];
-            seconds = udon[2];
+            minutes = udon[0];
+            seconds = 30;
             break;
     }
 
@@ -63,7 +63,7 @@ function getTime (hrs, mins, secs, time_vals){ // time_vals is an array that hol
         mins(Math.floor((currentTime / MINUTE) % 60));
         secs(Math.floor((currentTime / SECOND) % 60));
     }
-    else {
+    else if (started === false) {
         hrs(time_vals[0]);
         mins(time_vals[1]);
         secs(time_vals[2]);
@@ -79,11 +79,8 @@ export function Timer (props) { /* props will be the time the timer is set to (e
     // the amount of time will be based on the id in the url
     const {id} = useParams();
 
-
-
     // calling our helper function!
     const TIME_VALUES = setTotalTime(id);
-    //const TOTAL_TIME = TIME_VALUES[3];
 
     const [timeHours, setTimeHours] = useState(TIME_VALUES[0]);
     const [timeMinutes, setTimeMinutes] = useState(TIME_VALUES[1]);
@@ -93,12 +90,17 @@ export function Timer (props) { /* props will be the time the timer is set to (e
     useEffect(() => {
         const interval = setInterval(() => getTime(setTimeHours, setTimeMinutes, setTimeSeconds, TIME_VALUES), 1000);
     
-        return () => clearInterval(interval);
-      }, []);
+        return () => {
+            clearInterval(interval)
+            // getTime(setTimeHours, setTimeMinutes, setTimeSeconds, TIME_VALUES);
+        };
+      }, [timeHours, timeMinutes, timeSeconds, TIME_VALUES]);
 
     // resets the bool
-    if (timeHours === 0 && timeMinutes === 0 && timeSeconds === 0) {
+    if (timeHours <= 0 && timeMinutes <= 0 && timeSeconds <= 0) {
         started = false;
+        console.log(timeHours, timeMinutes, timeSeconds)
+        console.log(started)
     }
 
 
