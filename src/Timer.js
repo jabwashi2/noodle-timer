@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 /*
 * there will be preset values based on a couple different noodles, then there will be a custom option where the user can set any time they want
 * Date() will need to be used, values are returned in milliseconds, so things will need to be divided by 1000!!!
+* note: set started back to false when the page is refreshed (there will be a back button later so do it when that is clicked)
 */
 
 const SECOND = 1000;
@@ -16,11 +17,13 @@ let pasta = [0, 10, 0];
 let udon = [0, 5, 0];
 let ramen = [0, 3, 0];
 
+let started = false;
+
 
 function setTotalTime(id) {
 
     // let's try adding the time we want to get to + the current time to = totalTime
-    const totalTime = new Date();
+    const TOTAL_TIME = new Date();
 
     let hours = 0;
     let minutes = 0;
@@ -44,23 +47,28 @@ function setTotalTime(id) {
             break;
     }
 
+    TOTAL_TIME.setHours(TOTAL_TIME.getHours() + hours);
+    TOTAL_TIME.setMinutes(TOTAL_TIME.getMinutes() + minutes);
+    TOTAL_TIME.setSeconds(TOTAL_TIME.getSeconds() + seconds);
 
-    // if (id === 'pasta'){
-    //     hours = pasta[0];
-    //     minutes = pasta[1];
-    //     seconds = pasta[2];
-    // }
-    // else if (id === 'udon'){
-    //     hours = udon[0];
-    //     minutes = udon[1];
-    //     seconds = udon[2];
-    // }
+    return [hours, minutes, seconds, TOTAL_TIME.getTime()];
+}
 
-    totalTime.setHours(totalTime.getHours() + hours);
-    totalTime.setMinutes(totalTime.getMinutes() + minutes);
-    totalTime.setSeconds(totalTime.getSeconds() + seconds);
+function getTime (hrs, mins, secs, time_vals){ // time_vals is an array that holds starting values for hrs, mins, secs, and the total time
 
-    return totalTime.getTime();
+    if (started === true) {
+        let currentTime = time_vals[3] - Date.now();
+
+        hrs(Math.floor((currentTime / HOUR) % 24));
+        mins(Math.floor((currentTime / MINUTE) % 60));
+        secs(Math.floor((currentTime / SECOND) % 60));
+    }
+    else {
+        hrs(time_vals[0]);
+        mins(time_vals[1]);
+        secs(time_vals[2]);
+    }
+    
 }
 
 export function Timer (props) { /* props will be the time the timer is set to (ex: 5 minutes, ten minutes, etc) */
@@ -70,33 +78,36 @@ export function Timer (props) { /* props will be the time the timer is set to (e
 
     // the amount of time will be based on the id in the url
     const {id} = useParams();
-    console.log(id)
 
-    const [timeHours, setTimeHours] = useState(0);
-    const [timeMinutes, setTimeMinutes] = useState(0);
-    const [timeSeconds, setTimeSeconds] = useState(0);
+
 
     // calling our helper function!
-    const totalTime = setTotalTime(id);
+    const TIME_VALUES = setTotalTime(id);
+    //const TOTAL_TIME = TIME_VALUES[3];
 
-    const getTime = () => {
-        const currentTime = totalTime - Date.now();
+    const [timeHours, setTimeHours] = useState(TIME_VALUES[0]);
+    const [timeMinutes, setTimeMinutes] = useState(TIME_VALUES[1]);
+    const [timeSeconds, setTimeSeconds] = useState(TIME_VALUES[2]);
 
-        setTimeHours(Math.floor((currentTime / HOUR) % 24));
-        setTimeMinutes(Math.floor((currentTime / MINUTE) % 60));
-        setTimeSeconds(Math.floor((currentTime / SECOND) % 60));
-    };
-
+    // this makes the timer work
     useEffect(() => {
-        const interval = setInterval(() => getTime(totalTime), 1000);
+        const interval = setInterval(() => getTime(setTimeHours, setTimeMinutes, setTimeSeconds, TIME_VALUES), 1000);
     
         return () => clearInterval(interval);
       }, []);
 
+    // resets the bool
+    if (timeHours === 0 && timeMinutes === 0 && timeSeconds === 0) {
+        started = false;
+    }
+
 
     return (
-        <div className="timer">
-            <p>{timeHours > 0 ? timeHours : 0} : {timeMinutes > 0 ? timeMinutes : 0} : {timeSeconds > -1 ? timeSeconds : 0}</p> {/*time stops at 0*/}
+        <div className="timer-page">
+            <div className="timer">
+                <p>{timeHours > 0 ? timeHours : 0} : {timeMinutes > 0 ? timeMinutes : 0} : {timeSeconds > -1 ? timeSeconds : 0}</p> {/*time stops at 0*/}
+            </div>
+            <button id='startbtn' onClick={() => {started = true}}>Start</button>
         </div>
     )
 }
