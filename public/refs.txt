@@ -1,0 +1,3 @@
+https://www.freecodecamp.org/news/build-a-countdown-timer-with-react-step-by-step/#heading-2-create-the-count-down-component
+
+https://dev.to/yuridevat/how-to-create-a-timer-with-react-7b9
